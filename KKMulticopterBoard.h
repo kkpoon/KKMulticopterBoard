@@ -4,6 +4,10 @@
 #define KKMulticopterBoard_CONTROL_MIN 1000
 #define KKMulticopterBoard_CONTROL_MAX 2000
 
+#define KKMulticopterBoard_MODE_NORMAL 1
+#define KKMulticopterBoard_MODE_ACRO   2
+#define KKMulticopterBoard_MODE_UFO    3
+
 #include <Arduino.h>
 #include <Servo.h>
 
@@ -11,8 +15,12 @@ class KKMulticopterBoard
 {
     public:
         KKMulticopterBoard(int, int, int, int);
+        
         void arm();
         void disarm();
+        void setMode(int);
+        int  getMode();
+        
         void idle();
         void level();
 
@@ -40,6 +48,9 @@ class KKMulticopterBoard
         int _elevator;
         int _throttle;
         int _rudder;
+        
+        boolean _isArmed;
+        int _mode;
 
         int _getControlValue(float);
 };

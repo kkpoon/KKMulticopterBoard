@@ -13,6 +13,7 @@ KKMulticopterBoard::KKMulticopterBoard(int a_pin,
     _thr.attach(t_pin, _controlMin, _controlMax);
     _rud.attach(r_pin, _controlMin, _controlMax);
     idle();
+    _isArmed = false;
 }
 
 int KKMulticopterBoard::_getControlValue(float value)
@@ -46,6 +47,7 @@ void KKMulticopterBoard::arm()
     delay(5000);
     idle();
     delay(5000);
+    _isArmed = true;
 }
 
 void KKMulticopterBoard::disarm()
@@ -59,6 +61,40 @@ void KKMulticopterBoard::disarm()
     delay(5000);
     idle();
     delay(5000);
+}
+
+void KKMulticopterBoard::setMode(int mode)
+{
+    if (!_isArmed) arm();
+    
+    switch (mode) {
+        case KKMulticopterBoard_MODE_NORMAL:
+            setThrottle(0);
+            setRudder(-100);
+            setElevator(100);
+            delay(1000);
+            _mode = KKMulticopterBoard_MODE_NORMAL;
+            break;
+        case KKMulticopterBoard_MODE_ACRO:
+            setThrottle(0);
+            setRudder(-100);
+            setElevator(-100);
+            delay(1000);
+            _mode = KKMulticopterBoard_MODE_ACRO;
+            break;
+        case KKMulticopterBoard_MODE_UFO:
+            setThrottle(0);
+            setRudder(100);
+            setElevator(-100);
+            delay(1000);
+            _mode = KKMulticopterBoard_MODE_UFO;
+            break;
+    }
+}
+
+int KKMulticopterBoard::getMode()
+{
+    return _mode;
 }
 
 void KKMulticopterBoard::setAileron(int value)
